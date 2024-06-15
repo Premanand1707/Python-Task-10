@@ -1,0 +1,123 @@
+import random
+class Audio:
+    def __init__(self, name, url):
+        self.name = name
+        self.url = url
+        self.ratings = []
+
+    def add_rating(self, rating):
+        self.ratings.append(rating)
+
+    def average_rating(self):
+        if len(self.ratings) == 0:
+            return 0
+        return sum(self.ratings) / len(self.ratings)
+
+    def __str__(self):
+        return f"Audio Name: {self.name}, URL: {self.url}, Average Rating: {self.average_rating():.2f}"
+
+class Playlist:
+    def __init__(self, name, genre):
+        self.name = name
+        self.genre = genre
+        self.audios = []
+        self.ratings = []
+
+    def add_audio(self, audio):
+        self.audios.append(audio)
+
+    def add_rating(self, rating):
+        self.ratings.append(rating)
+
+    def average_rating(self):
+        if len(self.ratings) == 0:
+            return 0
+        return sum(self.ratings) / len(self.ratings)
+
+    def search_audio(self, audio_name):
+        for audio in self.audios:
+            if audio.name == audio_name:
+                return audio
+        return None
+
+    def __str__(self):
+        return f"Playlist Name: {self.name}, Genre: {self.genre}, Average Rating: {self.average_rating():.2f}, Number of Audios: {len(self.audios)}"
+
+class MusicPlayer:
+    def __init__(self):
+        self.playlists = []
+
+    def create_playlist(self, name, genre):
+        playlist = Playlist(name, genre)
+        self.playlists.append(playlist)
+        return playlist
+
+    def search_playlist(self, playlist_name):
+        for playlist in self.playlists:
+            if playlist.name == playlist_name:
+                return playlist
+        return None
+
+    def display_playlists(self):
+        for playlist in self.playlists:
+            print(playlist)
+
+    def display_audios_in_playlist(self, playlist_name):
+        playlist = self.search_playlist(playlist_name)
+        if playlist:
+            for audio in playlist.audios:
+                print(audio)
+        else:
+            print("Playlist not found")
+
+# Simulate 3 users giving random ratings
+def generate_random_ratings(entity):
+    for _ in range(3):  # Simulate 3 users
+        rating = random.randint(1, 5)
+        entity.add_rating(rating)
+
+# Create MusicPlayer instance
+music_player = MusicPlayer()
+
+# Create some playlists
+pop_playlist = music_player.create_playlist("Pop Hits", "Pop")
+rock_playlist = music_player.create_playlist("Rock Anthems", "Rock")
+
+# Create some audios
+audio1 = Audio("Song 1", "http://example.com/song1")
+audio2 = Audio("Song 2", "http://example.com/song2")
+audio3 = Audio("Song 3", "http://example.com/song3")
+
+# Add audios to playlists
+pop_playlist.add_audio(audio1)
+pop_playlist.add_audio(audio2)
+rock_playlist.add_audio(audio3)
+
+# Generate random ratings for playlists and audios
+generate_random_ratings(pop_playlist)
+generate_random_ratings(rock_playlist)
+generate_random_ratings(audio1)
+generate_random_ratings(audio2)
+generate_random_ratings(audio3)
+
+# Display playlists
+print("Playlists:")
+music_player.display_playlists()
+
+# Display audios in a specific playlist
+print("\nAudios in Pop Hits Playlist:")
+music_player.display_audios_in_playlist("Pop Hits")
+
+# Search and display a specific audio by name
+audio = pop_playlist.search_audio("Song 1")
+if audio:
+    print("\nFound Audio:", audio)
+else:
+    print("\nAudio not found")
+
+# Search and display a specific playlist by name
+playlist = music_player.search_playlist("Rock Anthems")
+if playlist:
+    print("\nFound Playlist:", playlist)
+else:
+    print("\nPlaylist not found")
